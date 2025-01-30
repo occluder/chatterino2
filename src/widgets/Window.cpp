@@ -664,6 +664,9 @@ void Window::addShortcuts()
              {
                  this->notebook_->onlyShowLiveTabsAction->trigger();
              }
+             else if (arg == "LiveOrHighlightedOnly") {
+                 this->notebook_->onlyShowLiveOrHighlightedTabsAction->trigger();
+             }
              else if (arg == "toggleLiveOnly")
              {
                  // NOOP: Removed 2024-08-04 https://github.com/Chatterino/chatterino2/pull/5530

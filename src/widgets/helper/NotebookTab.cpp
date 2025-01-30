@@ -569,6 +569,11 @@ void NotebookTab::updateHighlightState(HighlightState newHighlightStyle,
 
     this->highlightState_ = newHighlightStyle;
     this->update();
+    if (newHighlightStyle == HighlightState::Highlighted &&
+        getSettings()->tabVisibility.getEnum() == NotebookTabVisibility::LiveOrHighlightedOnly)
+    {
+        this->notebook_->refresh();
+    }
 }
 
 bool NotebookTab::shouldMessageHighlight(

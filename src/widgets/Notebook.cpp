@@ -1364,6 +1364,20 @@ SplitNotebook::SplitNotebook(Window *parent)
                      });
     tabVisibilityActionGroup->addAction(this->onlyShowLiveTabsAction);
 
+    this->onlyShowLiveOrHighlightedTabsAction = new QAction("Only show live or highlighted tabs", this);
+    this->onlyShowLiveOrHighlightedTabsAction->setCheckable(true);
+    this->onlyShowLiveOrHighlightedTabsAction->setShortcut(
+        getApp()->getHotkeys()->getDisplaySequence(
+            HotkeyCategory::Window, "setTabVisibility", {{"LiveOrHighlightedOnly"}}));
+    QObject::connect(this->onlyShowLiveOrHighlightedTabsAction, &QAction::triggered, this,
+                     [this] {
+                         this->setShowTabs(true);
+                         getSettings()->tabVisibility.setValue(
+                             NotebookTabVisibility::LiveOrHighlightedOnly);
+                         this->onlyShowLiveOrHighlightedTabsAction->setChecked(true);
+                     });
+    tabVisibilityActionGroup->addAction(this->onlyShowLiveOrHighlightedTabsAction);
+
     this->hideAllTabsAction = new QAction("Hide all tabs", this);
     this->hideAllTabsAction->setCheckable(true);
     this->hideAllTabsAction->setShortcut(
@@ -1389,6 +1403,11 @@ SplitNotebook::SplitNotebook(Window *parent)
             this->onlyShowLiveTabsAction->setChecked(true);
         }
         break;
+
+        case NotebookTabVisibility::LiveOrHighlightedOnly: {
+            this->onlyShowLiveOrHighlightedTabsAction->setChecked(true);
+        }
+        break;
     }
 
     getSettings()->tabVisibility.connect(
@@ -1403,6 +1422,11 @@ SplitNotebook::SplitNotebook(Window *parent)
                 case NotebookTabVisibility::LiveOnly:
                     this->setTabVisibilityFilter([](const NotebookTab *tab) {
                         return tab->isLive();
+                    });
+                    break;
+                case chatterino::NotebookTabVisibility::LiveOrHighlightedOnly:
+                    this->setTabVisibilityFilter([](const NotebookTab *tab) {
+                        return tab->isLive() || tab->highlightState() == HighlightState::Highlighted;
                     });
                     break;
                 case NotebookTabVisibility::AllTabs:
@@ -1469,6 +1493,7 @@ void SplitNotebook::addNotebookActionsToMenu(QMenu *menu)
     auto *submenu = menu->addMenu("Tab visibility");
     submenu->addAction(this->showAllTabsAction);
     submenu->addAction(this->onlyShowLiveTabsAction);
+    submenu->addAction(this->onlyShowLiveOrHighlightedTabsAction);
     submenu->addAction(this->hideAllTabsAction);
 }
 

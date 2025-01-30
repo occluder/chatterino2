@@ -350,6 +350,7 @@ inline const std::map<HotkeyCategory, ActionDefinitionMap> actionNames{
                   {"Show all tabs", {"on"}},
                   {"Hide all tabs", {"off"}},
                   {"Only show live tabs", {"liveOnly"}},
+                  {"Only show live or highlighted tabs", {"LiveOrHighlightedOnly"}}
               },
               .argumentsPrompt = "New value:",
               .argumentsPromptHover = "Should the tabs be enabled, disabled, "

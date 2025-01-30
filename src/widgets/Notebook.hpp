@@ -29,6 +29,9 @@ enum NotebookTabVisibility : int {
 
     // Only show tabs containing splits that are live
     LiveOnly = 1,
+
+    // Only show tabs that are either highlighted or contain splits that are live
+    LiveOrHighlightedOnly = 2,
 };
 
 using TabVisibilityFilter = std::function<bool(const NotebookTab *)>;
@@ -239,6 +242,7 @@ public:
 
     QAction *showAllTabsAction;
     QAction *onlyShowLiveTabsAction;
+    QAction *onlyShowLiveOrHighlightedTabsAction;
     QAction *hideAllTabsAction;
 
 protected:
